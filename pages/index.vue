@@ -83,5 +83,8 @@
 <script>
 export default {
   name: "IndexPage",
+  async fetch({ store }) {
+    await store.dispatch("fetchParams");
+  },
 };
 </script>

@@ -22,7 +22,9 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/vuetify": "^1.12.3",
+    "dotenv": "^16.0.0",
     "eslint-config-prettier": "^8.3.0",
     "prettier": "^2.5.1"
   }
