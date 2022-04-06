@@ -2,7 +2,7 @@
   <v-container class="pa-6">
     <div class="text-overline mb-6">Выберите город:</div>
     <v-row>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12" sm="6" md="5">
         <v-select
           @change="changeCountry"
           v-model="countrySelect"
@@ -13,7 +13,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="12" sm="6" md="5">
         <v-select
           @change="changeCity"
           v-model="citySelect"
