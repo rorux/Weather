@@ -1,90 +1,56 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>
-            Vuetify is a progressive Material Design component framework for
-            Vue.js. It was designed to empower developers to create amazing
-            applications.
-          </p>
-          <p>
-            For more information on Vuetify, check out the
-            <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation </a
-            >.
-          </p>
-          <p>
-            If you have questions, please join the official
-            <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord </a
-            >.
-          </p>
-          <p>
-            Find a bug? Report it on the github
-            <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board </a
-            >.
-          </p>
-          <p>
-            Thank you for developing with Vuetify and I look forward to bringing
-            more exciting features in the future.
-          </p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3" />
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br />
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container class="pa-4">
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="6" md="4" justify="center" align="center">
+        <v-text-field
+          cols="12"
+          sm="8"
+          md="6"
+          v-model="dateRangeText"
+          label="Диапазон дат"
+          prepend-icon="mdi-calendar"
+          readonly
+        ></v-text-field>
+        <v-date-picker
+          v-model="dates"
+          class="mt-4"
+          min="2022-03-27"
+          max="2022-04-10"
+          range
+        ></v-date-picker>
+      </v-col>
+    </v-row>
+    <v-row justify="center" align="center">
+      <v-col cols="12" sm="8" md="6">
+        <Chart />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import Chart from "@/components/Chart";
+import { mapState } from "vuex";
 export default {
   name: "IndexPage",
+  components: { Chart },
+  data: () => ({
+    dates: ["2022-03-27", "2022-04-10"],
+  }),
   async fetch({ store }) {
     await store.dispatch("fetchParams");
+  },
+  computed: {
+    ...mapState(["params"]),
+    dateRangeText() {
+      return this.dates
+        .sort()
+        .map(
+          (date) =>
+            `${date.substr(8, 2)}.${date.substr(5, 2)}.${date.substr(0, 4)}`
+        )
+        .join(" - ");
+    },
   },
 };
 </script>

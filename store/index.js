@@ -1,11 +1,15 @@
 export const state = () => ({
-  city: "Moscow",
+  country: "Россия",
+  city: "Москва",
   params: {},
 });
 
 export const mutations = {
   setCity(state, city) {
     state.city = city;
+  },
+  setCountry(state, country) {
+    state.country = country;
   },
   setParams(state, params) {
     state.params = params;
