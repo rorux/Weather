@@ -1,38 +1,46 @@
 <template>
-  <canvas height="200px" ref="canvas"></canvas>
+  <canvas height="300px" ref="canvas"></canvas>
 </template>
 
 <script>
 import { Line } from "vue-chartjs";
 export default {
   extends: Line,
+  props: {
+    datasets: {
+      labels: [],
+      data: [],
+      label: String,
+      borderColor: String,
+    },
+  },
   mounted() {
     this.renderChart(
       {
-        labels: [
-          "Январь",
-          "Февраль",
-          "Март",
-          "Апрель",
-          "Май",
-          "Июнь",
-          "Июль",
-          "Август",
-          "Сентябрь",
-          "Октябрь",
-          "Ноябрь",
-          "Декабрь",
-        ],
+        labels: this.datasets.labels,
         datasets: [
           {
-            label: "Коммиты на GitHub",
-            borderColor: "#f87979",
-            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
+            label: this.datasets.label,
+            borderColor: this.datasets.borderColor,
+            data: this.datasets.data,
             fill: false,
           },
         ],
       },
-      { responsive: true, maintainAspectRatio: false }
+      {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              display: true,
+              ticks: {
+                maxTicksLimit: 5,
+              },
+            },
+          ],
+        },
+      }
     );
   },
 };

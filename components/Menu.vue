@@ -23,7 +23,7 @@ export default {
       },
       {
         icon: "mdi-chart-bubble",
-        title: "Выбрать город",
+        title: "Изменить город",
         to: "/city",
       },
     ],

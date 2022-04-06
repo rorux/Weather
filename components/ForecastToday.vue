@@ -2,15 +2,20 @@
   <v-card class="pa-4 mb-4">
     <div class="text-overline mb-2 blue--text text--darken-4">
       <v-icon class="mr-2 blue--text text--darken-4" small>mdi-cloud</v-icon
-      >Погода сегодня
+      >Погода сейчас
       <v-icon class="blue--text text--darken-4" small>mdi-cloud</v-icon>
     </div>
-    <div class="text-caption mb-2">{{ params.description }}</div>
+    <div class="text-caption mb-2 grey--text">{{ params.description }}</div>
     <div>
       <span class="text-caption">Температура: </span>
-      <span class="text-body1 font-weight-bold">{{
-        params.temp > 0 ? "+" + params.temp : params.temp
-      }}</span>
+      <span class="text-body1 font-weight-bold"
+        >{{ params.temp > 0 ? "+" + params.temp : params.temp }}&deg;</span
+      >
+      <span class="text-body1 font-weight-bold"
+        >({{
+          params.feels_like > 0 ? "+" + params.feels_like : params.feels_like
+        }}&deg;)</span
+      >
     </div>
     <div>
       <span class="text-caption">Ветер: </span>
@@ -38,6 +43,7 @@ export default {
       sunset: Number,
       description: String,
       temp: Number,
+      feels_like: Number,
       pressure: Number,
       humidity: Number,
       wind: {

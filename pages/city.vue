@@ -51,6 +51,7 @@ export default {
     },
     changeCity(city) {
       this.setCity(city);
+      this.$router.replace({ path: "/" });
     },
   },
   mounted() {
