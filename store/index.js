@@ -20,7 +20,7 @@ export const actions = {
   async getCityCoordinates({ state }) {
     try {
       const res = await this.$axios.$get(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${state.city}&limit=1&appid=${process.env.appId}`
+        `/api/geo/1.0/direct?q=${state.city}&limit=1&appid=${process.env.appId}`
       );
       const { lat, lon } = res[0];
       return { lat, lon };
@@ -32,7 +32,7 @@ export const actions = {
     try {
       const { lat, lon } = await dispatch("getCityCoordinates");
       const params = await this.$axios.$get(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${process.env.appId}&units=metric&lang=ru`
+        `/api/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${process.env.appId}&units=metric&lang=ru`
       );
       commit("setParams", params);
     } catch (e) {

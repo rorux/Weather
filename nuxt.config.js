@@ -35,7 +35,14 @@ export default {
   modules: ["@nuxtjs/axios"],
 
   axios: {
-    baseURL: "/",
+    proxy: true,
+  },
+
+  proxy: {
+    "/api/": {
+      target: "https://api.openweathermap.org",
+      pathRewrite: { "^/api/": "" },
+    },
   },
 
   env: {
