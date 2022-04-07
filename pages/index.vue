@@ -135,9 +135,10 @@ export default {
         this.pressureDatasets.datasets[0].data = [];
 
         this.params.list.forEach((el) => {
+          const dt = el.dt_txt.substr(0, 10) + "T" + el.dt_txt.substr(11, 8);
           if (
-            new Date(el.dt_txt) >= new Date(`${sortedDates[0]} 00:00:00`) &&
-            new Date(el.dt_txt) < new Date(`${sortedDates[1]} 23:59:59`)
+            Date.parse(dt) >= Date.parse(`${sortedDates[0]}T00:00:00`) &&
+            Date.parse(dt) < Date.parse(`${sortedDates[1]}T23:59:59`)
           ) {
             this.updateDatasets(el);
           }
