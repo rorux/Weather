@@ -33,6 +33,16 @@ import DatePicker from "@/components/DatePicker";
 import { mapState } from "vuex";
 export default {
   name: "IndexPage",
+  head: {
+    title: "Прогноз на 5 дней",
+    meta: [
+      {
+        hid: "description",
+        name: "description",
+        content: "Прогноз погоды на ближайшие 5 дней",
+      },
+    ],
+  },
   components: { Chart, ForecastToday, DatePicker },
   data: () => ({
     key: 0,

@@ -31,6 +31,16 @@ import { countryList, cityList } from "@/services/guides";
 import { mapState, mapMutations } from "vuex";
 export default {
   name: "City",
+  head: {
+    title: "Выбор города",
+    meta: [
+      {
+        hid: "description",
+        name: "description",
+        content: "Выбор страны и города для просмотра прогноза погоды",
+      },
+    ],
+  },
   data: () => ({
     countrySelect: null,
     citySelect: null,
