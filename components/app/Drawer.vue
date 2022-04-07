@@ -8,7 +8,9 @@
 import Menu from "@/components/Menu";
 export default {
   name: "Drawer",
-  props: ["drawer"],
+  props: {
+    drawer: Boolean,
+  },
   components: { Menu },
   data: () => ({
     isOpen: false,

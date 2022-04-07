@@ -6,24 +6,7 @@
     <v-row v-else justify="center">
       <v-col cols="12" sm="10" md="6" justify="center" align="center">
         <ForecastToday :params="today" />
-        <v-card class="pa-4">
-          <div class="text-overline purple--text text--darken-4">
-            <v-icon class="mr-2 purple--text text--darken-4" small
-              >mdi-chart-line</v-icon
-            >Фильтр по датам<v-icon
-              class="ml-2 purple--text text--darken-4"
-              small
-              >mdi-chart-line</v-icon
-            >
-          </div>
-          <v-date-picker
-            v-model="dates"
-            class="mt-4"
-            :min="dateBegin"
-            :max="dateEnd"
-            range
-          ></v-date-picker>
-        </v-card>
+        <DatePicker :dates.sync="dates" :min="dateBegin" :max="dateEnd" />
       </v-col>
       <v-col cols="12" sm="10" md="6" justify="center" align="center">
         <v-card class="pa-4 mb-4">
@@ -35,6 +18,9 @@
         <v-card class="pa-4 mb-4">
           <Chart :datasets="pressureDatasets" :key="key" />
         </v-card>
+        <v-card class="pa-4 mb-4">
+          <Chart :datasets="fullDatasets" :key="key" />
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -43,10 +29,11 @@
 <script>
 import Chart from "@/components/Chart";
 import ForecastToday from "@/components/ForecastToday";
+import DatePicker from "@/components/DatePicker";
 import { mapState } from "vuex";
 export default {
   name: "IndexPage",
-  components: { Chart, ForecastToday },
+  components: { Chart, ForecastToday, DatePicker },
   data: () => ({
     key: 0,
     today: {
@@ -68,21 +55,35 @@ export default {
     dateEnd: "",
     tempDatasets: {
       labels: [],
-      data: [],
-      label: "Температура (по Цельсию)",
-      borderColor: "green",
+      datasets: [
+        {
+          data: [],
+          label: "Температура (по Цельсию)",
+          borderColor: "green",
+          fill: false,
+        },
+      ],
     },
     humidityDatasets: {
       labels: [],
-      data: [],
-      label: "Влажность (%)",
-      borderColor: "blue",
+      datasets: [
+        { data: [], label: "Влажность (%)", borderColor: "blue", fill: false },
+      ],
     },
     pressureDatasets: {
       labels: [],
-      data: [],
-      label: "Давление (мм рт)",
-      borderColor: "#f87979",
+      datasets: [
+        {
+          data: [],
+          label: "Давление (мм рт)",
+          borderColor: "#f87979",
+          fill: false,
+        },
+      ],
+    },
+    fullDatasets: {
+      labels: [],
+      datasets: [],
     },
   }),
   async fetch({ store }) {
@@ -91,6 +92,26 @@ export default {
   computed: {
     ...mapState(["params", "city"]),
   },
+  methods: {
+    updateDatasets(el) {
+      const dt_txt_edit =
+        el.dt_txt.substr(8, 2) +
+        "." +
+        el.dt_txt.substr(5, 2) +
+        " " +
+        el.dt_txt.substr(11, 5);
+
+      this.tempDatasets.labels.push(dt_txt_edit);
+      this.humidityDatasets.labels.push(dt_txt_edit);
+      this.pressureDatasets.labels.push(dt_txt_edit);
+      this.fullDatasets.labels.push(dt_txt_edit);
+      this.tempDatasets.datasets[0].data.push(Math.round(el.main.temp));
+      this.humidityDatasets.datasets[0].data.push(el.main.humidity);
+      this.pressureDatasets.datasets[0].data.push(
+        Math.round(el.main.pressure / 1.333)
+      );
+    },
+  },
   watch: {
     dates() {
       if (this.dates.length === 2) {
@@ -98,33 +119,23 @@ export default {
         this.tempDatasets.labels = [];
         this.humidityDatasets.labels = [];
         this.pressureDatasets.labels = [];
-        this.tempDatasets.data = [];
-        this.humidityDatasets.data = [];
-        this.pressureDatasets.data = [];
+        this.fullDatasets.labels = [];
+        this.tempDatasets.datasets[0].data = [];
+        this.humidityDatasets.datasets[0].data = [];
+        this.pressureDatasets.datasets[0].data = [];
 
         this.params.list.forEach((el) => {
           if (
             new Date(el.dt_txt) >= new Date(`${sortedDates[0]} 00:00:00`) &&
             new Date(el.dt_txt) < new Date(`${sortedDates[1]} 23:59:59`)
           ) {
-            const dt_txt_edit =
-              el.dt_txt.substr(8, 2) +
-              "." +
-              el.dt_txt.substr(5, 2) +
-              " " +
-              el.dt_txt.substr(11, 5);
-
-            this.tempDatasets.labels.push(dt_txt_edit);
-            this.humidityDatasets.labels.push(dt_txt_edit);
-            this.pressureDatasets.labels.push(dt_txt_edit);
-            this.tempDatasets.data.push(Math.round(el.main.temp));
-            this.humidityDatasets.data.push(el.main.humidity);
-            this.pressureDatasets.data.push(
-              Math.round(el.main.pressure / 1.333)
-            );
-            this.key++;
+            this.updateDatasets(el);
           }
         });
+        this.fullDatasets.datasets[0] = this.tempDatasets.datasets[0];
+        this.fullDatasets.datasets[1] = this.humidityDatasets.datasets[0];
+        this.fullDatasets.datasets[2] = this.pressureDatasets.datasets[0];
+        this.key++;
       }
     },
   },
@@ -145,19 +156,11 @@ export default {
     );
 
     this.params.list.forEach((el) => {
-      const dt_txt_edit =
-        el.dt_txt.substr(8, 2) +
-        "." +
-        el.dt_txt.substr(5, 2) +
-        " " +
-        el.dt_txt.substr(11, 5);
-      this.tempDatasets.labels.push(dt_txt_edit);
-      this.humidityDatasets.labels.push(dt_txt_edit);
-      this.pressureDatasets.labels.push(dt_txt_edit);
-      this.tempDatasets.data.push(Math.round(el.main.temp));
-      this.humidityDatasets.data.push(el.main.humidity);
-      this.pressureDatasets.data.push(Math.round(el.main.pressure / 1.333));
+      this.updateDatasets(el);
     });
+    this.fullDatasets.datasets[0] = this.tempDatasets.datasets[0];
+    this.fullDatasets.datasets[1] = this.humidityDatasets.datasets[0];
+    this.fullDatasets.datasets[2] = this.pressureDatasets.datasets[0];
     this.key++;
   },
 };

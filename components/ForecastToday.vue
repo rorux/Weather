@@ -37,6 +37,7 @@
 
 <script>
 export default {
+  name: "ForecastToday",
   props: {
     params: {
       sunrise: Number,

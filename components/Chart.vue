@@ -5,43 +5,31 @@
 <script>
 import { Line } from "vue-chartjs";
 export default {
+  name: "Chart",
   extends: Line,
   props: {
     datasets: {
       labels: [],
-      data: [],
-      label: String,
-      borderColor: String,
+      datasets: [
+        { data: [], label: String, borderColor: String, fill: Boolean },
+      ],
     },
   },
   mounted() {
-    this.renderChart(
-      {
-        labels: this.datasets.labels,
-        datasets: [
+    this.renderChart(this.datasets, {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [
           {
-            label: this.datasets.label,
-            borderColor: this.datasets.borderColor,
-            data: this.datasets.data,
-            fill: false,
+            display: true,
+            ticks: {
+              maxTicksLimit: 5,
+            },
           },
         ],
       },
-      {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [
-            {
-              display: true,
-              ticks: {
-                maxTicksLimit: 5,
-              },
-            },
-          ],
-        },
-      }
-    );
+    });
   },
 };
 </script>
