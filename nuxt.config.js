@@ -2,7 +2,6 @@ import colors from "vuetify/es5/util/colors";
 
 export default {
   ssr: false,
-
   head: {
     titleTemplate: "Погода | %s",
     title: "Погода",
@@ -21,34 +20,24 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
-
   loading: { color: "#409EFF" },
-
   css: [],
-
   plugins: [],
-
   components: true,
-
   buildModules: ["@nuxtjs/vuetify"],
-
   modules: ["@nuxtjs/axios"],
-
   axios: {
     proxy: true,
   },
-
   proxy: {
     "/api/": {
       target: "https://api.openweathermap.org",
       pathRewrite: { "^/api/": "" },
     },
   },
-
   env: {
     appId: process.env.APP_ID,
   },
-
   vuetify: {
     customVariables: ["~/assets/variables.scss"],
     theme: {
@@ -65,6 +54,5 @@ export default {
       },
     },
   },
-
   build: {},
 };
